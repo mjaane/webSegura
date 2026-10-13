@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// SEGURIDAD: Control de acceso estricto (Prevención de Bypass).
+// Control de acceso estricto (Prevención de Bypass).
 // Si alguien intenta entrar directamente a 'perfil.php' sin iniciar sesión, 
 // la variable $_SESSION['usuario'] estará vacía, así que lo expulsamos al login.
 if (!isset($_SESSION['usuario'])) {

@@ -1,8 +1,8 @@
 <?php
-// Creamos una nueva conexión a la base de datos SQLite (se creará el archivo si no existe)
+// Creamos una nueva conexión a la base de datos SQLite se creará el archivo si no existe
 $pdo = new PDO('sqlite:seguridad.db');
 
-// Configuramos la base de datos para que nos avise si hay errores (lanza excepciones)
+// Configuramos la base de datos para que nos avise si hay errores 
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Ejecutamos una consulta para crear la tabla 'usuarios' solo si aún no existe.

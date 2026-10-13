@@ -1,7 +1,7 @@
 <?php
 session_start(); // Retomamos la sesión actual del usuario
         
-// SEGURIDAD: Destruimos completamente la sesión en el servidor.
+// Destruimos completamente la sesión en el servidor.
 // Esto borra los datos, invalida la cookie y asegura que al volver atrás no se pueda ver el perfil.
 session_destroy(); 
 

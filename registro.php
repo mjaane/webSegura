@@ -3,30 +3,28 @@ session_start(); // Iniciamos el sistema de sesiones
 require 'db.php'; // Importamos la conexión a la base de datos
 $error = ''; // Variable para guardar mensajes de error
 
-// Comprobamos si el usuario ha enviado el formulario (método POST)
+// Comprobamos si el usuario ha enviado el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recogemos el email y contraseña. Si están vacíos, asignamos texto en blanco ('')
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // SEGURIDAD: Validación de entrada. Evitamos contraseñas débiles o vacías.
+    // Validación de entrada. Evitamos contraseñas débiles o vacías.
     if (strlen($password) < 8) {
         $error = "La contraseña debe tener al menos 8 caracteres.";
     } else {
-        // SEGURIDAD: Hashing. Transforma "12345678" en un texto largo e ilegible ($2y$10$...).
-        // Si un hacker roba la base de datos, no sabrá las contraseñas reales.
+        //  Transforma "12345678" en un texto largo e ilegible ($2y$10$...).
         $hash = password_hash($password, PASSWORD_DEFAULT);
         
         try {
-            // SEGURIDAD: Consultas preparadas. Usamos '?' en lugar de poner las variables directamente.
-            // Esto neutraliza por completo los ataques de Inyección SQL (SQLi).
+            // Consultas preparadas. Usamos '?' en lugar de poner las variables directamente.
             $stmt = $pdo->prepare("INSERT INTO usuarios (email, password) VALUES (?, ?)");
             // Sustituimos los '?' de forma segura por el email y el hash
             $stmt->execute([$email, $hash]);
             
             // Si el registro funciona, redirigimos al usuario a la página de login
             header("Location: login.php");
-            exit; // Detenemos la ejecución del script por seguridad
+            exit; 
         } catch (PDOException $e) {
             // Si falla (ej. el correo ya existe por la regla UNIQUE de la BD), mostramos error
             $error = "Este correo ya está registrado.";

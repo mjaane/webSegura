@@ -3,27 +3,25 @@ session_start();
 require 'db.php'; // Nos conectamos a la BD
 $error = '';
 
-// Si el usuario envía el formulario de login...
+// Si el usuario envía el formulario de login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Buscamos al usuario en la BD usando consultas preparadas (evita Inyección SQL)
+    // Buscamos al usuario en la BD usando consultas preparadas para evitar Inyección SQL
     $stmt = $pdo->prepare("SELECT password FROM usuarios WHERE email = ?");
     $stmt->execute([$email]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC); // Extraemos la fila de la BD
 
     // SEGURIDAD: password_verify compara la contraseña plana escrita con el hash guardado de forma segura.
-    // Si el usuario existe ($row) y la contraseña coincide...
     if ($row && password_verify($password, $row['password'])) {
-        // Creamos una variable de sesión con su email. ¡El usuario ya está logueado oficialmente!
+        // Creamos una variable de sesión con su email
         $_SESSION['usuario'] = $email; 
         header("Location: perfil.php"); // Lo llevamos a su zona privada
         exit;
     } else {
-        // SEGURIDAD: Mensaje de error genérico. 
+        // Mensaje de error genérico. 
         // No decimos "el email no existe" ni "contraseña incorrecta" para no dar pistas a los atacantes 
-        // sobre qué correos están registrados en el sistema (evita enumeración de usuarios).
         $error = "Credenciales incorrectas";
     }
 }
